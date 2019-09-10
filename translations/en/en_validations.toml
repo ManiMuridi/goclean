@@ -1,0 +1,7 @@
+[required]
+description = "required validation"
+other = "{{.Field}} is required"
+
+[email]
+description = "email validation"
+other = "please enter a valid {{.Field}}"

@@ -1,0 +1,9 @@
+[required]
+description = "required validation"
+other = "ar-{{.Field}} is ar-{{.Tag}}"
+
+[email]
+description = "email validation"
+other = "please enter a valid ar-{{.Field}}"
+
+

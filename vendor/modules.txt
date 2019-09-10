@@ -1,0 +1,59 @@
+# github.com/BurntSushi/toml v0.3.0
+github.com/BurntSushi/toml
+# github.com/go-playground/locales v0.12.1
+github.com/go-playground/locales
+github.com/go-playground/locales/currency
+# github.com/go-playground/universal-translator v0.16.0
+github.com/go-playground/universal-translator
+# github.com/google/uuid v1.1.1
+github.com/google/uuid
+# github.com/hashicorp/errwrap v1.0.0
+github.com/hashicorp/errwrap
+# github.com/hashicorp/go-multierror v1.0.0
+github.com/hashicorp/go-multierror
+# github.com/labstack/echo/v4 v4.1.6
+github.com/labstack/echo/v4
+# github.com/labstack/gommon v0.2.9
+github.com/labstack/gommon/color
+github.com/labstack/gommon/log
+# github.com/leodido/go-urn v1.1.0
+github.com/leodido/go-urn
+# github.com/mattn/go-colorable v0.1.2
+github.com/mattn/go-colorable
+# github.com/mattn/go-isatty v0.0.8
+github.com/mattn/go-isatty
+# github.com/mitchellh/mapstructure v1.1.2
+github.com/mitchellh/mapstructure
+# github.com/nicksnyder/go-i18n/v2 v2.0.2
+github.com/nicksnyder/go-i18n/v2/i18n
+github.com/nicksnyder/go-i18n/v2/internal
+github.com/nicksnyder/go-i18n/v2/internal/plural
+# github.com/rs/zerolog v1.14.3
+github.com/rs/zerolog
+github.com/rs/zerolog/log
+github.com/rs/zerolog/internal/cbor
+github.com/rs/zerolog/internal/json
+# github.com/streadway/amqp v0.0.0-20190404075320-75d898a42a94
+github.com/streadway/amqp
+# github.com/valyala/bytebufferpool v1.0.0
+github.com/valyala/bytebufferpool
+# github.com/valyala/fasttemplate v1.0.1
+github.com/valyala/fasttemplate
+# golang.org/x/crypto v0.0.0-20190605123033-f99c8df09eb5
+golang.org/x/crypto/acme
+golang.org/x/crypto/acme/autocert
+# golang.org/x/net v0.0.0-20190607181551-461777fb6f67
+golang.org/x/net/idna
+# golang.org/x/sys v0.0.0-20190609082536-301114b31cce
+golang.org/x/sys/unix
+# golang.org/x/text v0.3.2
+golang.org/x/text/language
+golang.org/x/text/internal/language
+golang.org/x/text/internal/language/compact
+golang.org/x/text/internal/tag
+golang.org/x/text/secure/bidirule
+golang.org/x/text/unicode/bidi
+golang.org/x/text/unicode/norm
+golang.org/x/text/transform
+# gopkg.in/go-playground/validator.v9 v9.29.1
+gopkg.in/go-playground/validator.v9
