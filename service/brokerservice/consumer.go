@@ -1,6 +1,8 @@
 package brokerservice
 
 import (
+	"encoding/json"
+	"fmt"
 	"os"
 	"os/signal"
 	"sync"
@@ -116,25 +118,8 @@ func (c *consumer) Run() {
 	var wg sync.WaitGroup
 	wg.Add(len(c.exchanges))
 
-	for k, _ := range c.exchanges {
-		go func(k string) {
-			defer wg.Done()
-			messages, err := c.exchanges[k].channel.Consume("", "", true, false, false, false, nil)
-
-			if err != nil {
-				panic(err)
-			}
-
-			func(delivery <-chan amqp.Delivery) {
-				for d := range delivery {
-					for j := range c.exchanges[k].Queues {
-						if d.RoutingKey == c.exchanges[k].Queues[j].Topic {
-							c.exchanges[k].Queues[j].HandlerFunc(d)
-						}
-					}
-				}
-			}(messages)
-		}(k)
+	for exchange := range c.exchanges {
+		go c.setupConsumer(&wg, exchange)
 	}
 
 	wg.Wait()
@@ -142,6 +127,47 @@ func (c *consumer) Run() {
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
+}
+
+func (c *consumer) setupConsumer(wg *sync.WaitGroup, exchange string) {
+	defer wg.Done()
+
+	messages, err := c.exchanges[exchange].channel.Consume(
+		"",
+		"",
+		true,
+		false,
+		false,
+		false,
+		nil)
+
+	if err != nil {
+		panic(err)
+	}
+
+	for d := range messages {
+		c.handleMessages(exchange, d)
+	}
+}
+
+func (c *consumer) handleMessages(exchange string, d amqp.Delivery) {
+	for j := range c.exchanges[exchange].Queues {
+		if d.RoutingKey == c.exchanges[exchange].Queues[j].Topic {
+			if persistanceEnabled {
+				var m *Message
+				if err := json.Unmarshal(d.Body, &m); err != nil {
+					// TODO handle error gracefully
+					fmt.Println(err)
+				}
+
+				if _, err := storage.Store(m); err != nil {
+					// TODO handle error gracefully
+					fmt.Println(err)
+				}
+			}
+			c.exchanges[exchange].Queues[j].HandlerFunc(d)
+		}
+	}
 }
 
 func (c *consumer) Logger() *zerolog.Logger {

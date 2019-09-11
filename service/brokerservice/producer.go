@@ -56,6 +56,12 @@ func Push(exchange, topic string, payload interface{}) (*Message, error) {
 		Payload:  payload,
 	}
 
+	if persistanceEnabled {
+		if _, err := storage.Store(&m); err != nil {
+			return nil, err
+		}
+	}
+
 	if err := pushMessage(m); err != nil {
 		return nil, err
 	}

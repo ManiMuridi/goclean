@@ -66,6 +66,10 @@ Bindings: Rules for distributing messages from exchanges to queues
 // type Producer interface{}
 
 // type Message interface{}
+var (
+	persistanceEnabled = false
+	storage            Storage
+)
 
 type Handler interface {
 	Queues() []Queue
@@ -92,6 +96,11 @@ type Exchange struct {
 //	Topic       string
 //	Url         string
 //}
+
+func SetStorage(store Storage) {
+	storage = store
+	persistanceEnabled = true
+}
 
 func NewConsumer(handler Handler) Consumer {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
