@@ -1,62 +1,74 @@
 package config
 
 import (
-	"github.com/BurntSushi/toml"
+	"fmt"
+
+	"github.com/spf13/viper"
 )
 
 var (
-	Broker  *broker
-	Http    *http
-	Service *service
-	Db      *database
-	cfg     *config
+	configLoaded = false
+	confType     = "toml"
+	confPath     = "."
 )
 
-//func init() {
-//	//if err := Load("./config.toml"); err != nil {
-//	//
-//	//	fmt.Println(err)
-//	//}
-//
-//}
+func Load() {
+	configLoaded = true
+	viper.SetConfigName("config")
+	viper.AddConfigPath(confPath)
+	viper.SetConfigType(confType)
 
-func Load(path string) error {
-	// TODO handle error safely
-	if _, err := toml.DecodeFile(path, &cfg); err != nil {
-		return err
+	if err := viper.ReadInConfig(); err != nil {
+		if err, ok := err.(viper.ConfigFileNotFoundError); ok {
+			panic(err)
+		} else {
+			panic(err)
+		}
 	}
-
-	Broker = &cfg.Broker
-	Http = &cfg.Http
-	Service = &cfg.Service
-	Db = &cfg.Db
-
-	return nil
 }
 
-type config struct {
-	Broker  broker
-	Http    http
-	Service service
-	Db      database
+func SetPath(path string) {
+	checkConfigLoaded()
+	confPath = path
 }
 
-type broker struct {
-	Url string
+func SetType(configType string) {
+	checkConfigLoaded()
+	confType = configType
 }
 
-type http struct {
-	Port uint16
+func Get(key string) interface{} {
+	checkConfigLoaded()
+	return viper.Get(key)
 }
 
-type service struct {
-	Name string
+func GetString(key string) string {
+	checkConfigLoaded()
+	return viper.GetString(key)
 }
 
-type database struct {
-	Host     string
-	Port     string
-	Database string
-	User     string
-	Password string
+func GetBool(key string) bool {
+	checkConfigLoaded()
+	return viper.GetBool(key)
+}
+
+func GetInt(key string) int {
+	checkConfigLoaded()
+	return viper.GetInt(key)
+}
+
+func GetInt32(key string) int32 {
+	checkConfigLoaded()
+	return viper.GetInt32(key)
+}
+
+func GetInt64(key string) int64 {
+	checkConfigLoaded()
+	return viper.GetInt64(key)
+}
+
+func checkConfigLoaded() {
+	if !configLoaded {
+		fmt.Println("Config has not been loaded. Did you forget to call config.Load()?")
+	}
 }

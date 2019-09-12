@@ -8,6 +8,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// TODO add domain events interface and service
 type Service interface {
 	Name() string
 	Bootstrap() error

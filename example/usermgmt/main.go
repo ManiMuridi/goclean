@@ -3,19 +3,16 @@ package main
 import (
 	"path/filepath"
 
-	"github.com/ManiMuridi/goclean/service/httpservice"
-
-	"github.com/ManiMuridi/goclean/translator"
-
 	"github.com/ManiMuridi/goclean/config"
+	"github.com/ManiMuridi/goclean/service/httpservice"
+	"github.com/ManiMuridi/goclean/translator"
 )
 
 func main() {
-	path, _ := filepath.Abs("./config.toml")
-
-	if err := config.Load(path); err != nil {
-		panic(err)
-	}
+	path, _ := filepath.Abs("./")
+	config.SetPath(path)
+	config.SetType("toml")
+	config.Load()
 
 	translator.Enable()
 

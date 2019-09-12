@@ -65,10 +65,6 @@ func NewHttp(handler HttpHandler) HttpService {
 	return svc.(HttpService)
 }
 
-//func (s *httpService) Config() *HttpConfig {
-//	return s.config
-//}
-
 func (s *httpService) Validator() *validation.Validator {
 	return s.validator
 }
@@ -102,7 +98,7 @@ func (s *httpService) Bootstrap() error {
 }
 
 func (s *httpService) Name() string {
-	return config.Service.Name
+	return config.GetString("service.name")
 }
 
 func (s *httpService) Handler() HttpHandler {
@@ -113,7 +109,7 @@ func (s *httpService) Run() {
 	go func() {
 		s.logger.Info().Msg("Running service...")
 
-		if err := s.http.Start(fmt.Sprintf(":%d", config.Http.Port)); err != nil {
+		if err := s.http.Start(fmt.Sprintf(":%d", config.GetInt("http.port"))); err != nil {
 			s.http.Logger.Info("shutting down the server")
 		}
 	}()

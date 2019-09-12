@@ -44,7 +44,7 @@ func (c *consumer) Handler() Handler {
 }
 
 func (c *consumer) Name() string {
-	return config.Service.Name
+	return config.GetString("service.name")
 }
 
 //func (c *consumer) Config() *Config {
@@ -182,7 +182,7 @@ func (c *consumer) configure() error {
 }
 
 func (c *consumer) openConnection() {
-	conn, err := amqp.Dial(config.Broker.Url)
+	conn, err := amqp.Dial(config.GetString("broker.url"))
 
 	if err != nil {
 		c.logger.Panic().Err(err)

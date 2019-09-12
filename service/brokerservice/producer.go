@@ -70,7 +70,7 @@ func Push(exchange, topic string, payload interface{}) (*Message, error) {
 }
 
 func pushMessage(msg Message) error {
-	conn, err := amqp.Dial(config.Broker.Url)
+	conn, err := amqp.Dial(config.GetString("broker.url"))
 
 	if err != nil {
 		return err
