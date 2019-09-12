@@ -1,4 +1,4 @@
-package service
+package httpservice
 
 import (
 	"github.com/labstack/echo/v4"

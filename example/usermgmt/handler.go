@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/ManiMuridi/goclean/service"
+	"github.com/ManiMuridi/goclean/service/httpservice"
 
 	"github.com/labstack/echo/v4"
 )
@@ -22,8 +22,8 @@ func (h *handler) Middleware() []echo.MiddlewareFunc {
 	return []echo.MiddlewareFunc{Cors}
 }
 
-func (h *handler) Routes() []service.Route {
-	return []service.Route{
+func (h *handler) Routes() []httpservice.Route {
+	return []httpservice.Route{
 		{
 			Name:        "Get All Users",
 			Path:        "/users",

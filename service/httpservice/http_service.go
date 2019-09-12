@@ -1,4 +1,4 @@
-package service
+package httpservice
 
 import (
 	"context"
@@ -6,6 +6,8 @@ import (
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/ManiMuridi/goclean/service"
 
 	"github.com/ManiMuridi/goclean/config"
 
@@ -54,7 +56,7 @@ func NewHttp(handler HttpHandler) HttpService {
 				return next(c)
 			}
 		})
-	svc := Bootstrap(&httpService{
+	svc := service.Bootstrap(&httpService{
 		//config:  config,
 		handler: handler,
 		http:    e,
