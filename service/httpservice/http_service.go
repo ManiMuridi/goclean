@@ -24,19 +24,12 @@ import (
 type HttpService interface {
 	Run()
 	Handler() HttpHandler
-	//Config() *HttpConfig
 	Validator() *validation.Validator
 }
 
-//type HttpConfig struct {
-//	Name string
-//	Port uint16
-//}
-
 type httpService struct {
-	handler HttpHandler
-	http    *echo.Echo
-	//config    *HttpConfig
+	handler   HttpHandler
+	http      *echo.Echo
 	validator *validation.Validator
 	logger    *zerolog.Logger
 }
@@ -48,16 +41,18 @@ func (s *httpService) ConfigLogger(logger *zerolog.Logger) {
 func NewHttp(handler HttpHandler) HttpService {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	e := echo.New()
+
 	e.Use( // middleware will get the preferred language from the Accept-Langauge header value
 		func(next echo.HandlerFunc) echo.HandlerFunc {
 			return func(c echo.Context) error {
-				lang := c.Request().Header.Get("Accept-Language")
-				translator.Tr.SetLanguage(lang)
+				if lang := c.Request().Header.Get("Accept-Language"); lang != "" {
+					translator.Tr.SetLanguage(lang)
+				}
 				return next(c)
 			}
 		})
+
 	svc := service.Bootstrap(&httpService{
-		//config:  config,
 		handler: handler,
 		http:    e,
 	})

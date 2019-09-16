@@ -8,6 +8,7 @@ require (
 	github.com/go-playground/universal-translator v0.16.0 // indirect
 	github.com/google/uuid v1.1.1
 	github.com/hashicorp/go-multierror v1.0.0
+	github.com/jmoiron/sqlx v1.2.0 // indirect
 	github.com/labstack/echo/v4 v4.1.6
 	github.com/leodido/go-urn v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.1.2

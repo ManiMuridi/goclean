@@ -2,11 +2,11 @@ package main
 
 import (
 	"github.com/ManiMuridi/goclean/command"
-	"github.com/ManiMuridi/goclean/example/model"
+	"github.com/ManiMuridi/goclean/example/http_service/model"
 )
 
 type Create struct {
-	Request CreateRequest
+	Request *CreateRequest
 }
 
 type CreateRequest struct {
@@ -14,7 +14,6 @@ type CreateRequest struct {
 }
 
 func (c *Create) Execute() *command.Result {
-
 	if err := Db.Store(c.Request.User); err != nil {
 		return &command.Result{
 			Error: err,

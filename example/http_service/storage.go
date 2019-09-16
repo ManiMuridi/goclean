@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/ManiMuridi/goclean/example/model"
+	"github.com/ManiMuridi/goclean/example/http_service/model"
 )
 
 var (

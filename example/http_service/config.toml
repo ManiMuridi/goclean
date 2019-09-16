@@ -1,5 +1,5 @@
 [service]
-Name = "User Management"
+Name = "Http Service"
 
 [http]
 Port = 5000
