@@ -12,15 +12,12 @@ import (
 	"golang.org/x/text/language"
 )
 
-//func init() {
-//	Tr = newTranslator()
-//}
-
 type Translator interface {
 	RegisterUnmarshalFunc(format string, unmarshalFunc i18n.UnmarshalFunc)
 	LoadMessageFile(path string) (*i18n.MessageFile, error)
 	Localize(config *i18n.LocalizeConfig) string
 	SetLanguage(lang string)
+	GetLanguage() string
 	TranslationFilesPath(path string)
 }
 
@@ -29,7 +26,7 @@ var (
 )
 
 func Enable() {
-	newTranslator()
+	Tr = newTranslator()
 }
 
 func newTranslator() *translator {
@@ -93,7 +90,12 @@ func (t *translator) TranslationFilesPath(fPath string) {
 }
 
 func (t *translator) SetLanguage(lang string) {
+	fmt.Println(lang)
 	t.localizer = i18n.NewLocalizer(t.bundle, lang)
+}
+
+func (t *translator) GetLanguage() string {
+	return t.bundle.LanguageTags()[0].String()
 }
 
 func (t *translator) LoadMessageFile(path string) (*i18n.MessageFile, error) {
