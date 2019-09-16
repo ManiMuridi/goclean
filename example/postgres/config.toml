@@ -1,0 +1,5 @@
+[database]
+host = "192.168.100.101"
+port = "30487"
+username = "postgresadmin"
+password = "admin123"
