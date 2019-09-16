@@ -3,7 +3,8 @@ package validation
 import (
 	"fmt"
 
-	"github.com/ManiMuridi/goclean/translator"
+	"github.com/ManiMuridi/goclean/util"
+
 	"gopkg.in/go-playground/validator.v9"
 )
 
@@ -35,7 +36,7 @@ func (v *Validator) Validate(i interface{}) error {
 	errs := &ValidationError{Errors: make(map[string]string)}
 
 	for _, e := range v.Validator.Struct(i).(validator.ValidationErrors) {
-		msg := translator.T(e.Tag(), map[string]string{"Field": e.Field(), "Tag": e.Tag()}, nil)
+		msg := util.T(e.Tag(), map[string]string{"Field": e.Field(), "Tag": e.Tag()}, nil)
 		errs.Errors[e.Field()] = msg
 	}
 

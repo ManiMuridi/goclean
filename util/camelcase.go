@@ -1,6 +1,6 @@
 // Package camelcase is a micro package to split the words of a camelcase type
 // string into a slice of words.
-package camelcase
+package util
 
 import (
 	"unicode"
