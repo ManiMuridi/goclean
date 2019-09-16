@@ -15,7 +15,7 @@ func main() {
 	config.SetType("toml")
 	config.Load()
 
-	util.Enable()
+	util.EnableTranslation()
 
 	httpSvc := httpservice.NewHttp(&handler{})
 

@@ -25,7 +25,7 @@ var (
 	Tr Translator
 )
 
-func Enable() {
+func EnableTranslation() {
 	Tr = newTranslator()
 }
 
