@@ -1,4 +1,0 @@
-[Emails]
-description = "The number of unread emails a user has"
-one = "{{.Name}} has email."
-other = "{{.Name}} has emails."
