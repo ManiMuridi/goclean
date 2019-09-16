@@ -7,11 +7,11 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/ManiMuridi/goclean/util"
+
 	"github.com/ManiMuridi/goclean/service"
 
 	"github.com/ManiMuridi/goclean/config"
-
-	"github.com/ManiMuridi/goclean/translator"
 
 	"github.com/ManiMuridi/goclean/validation"
 
@@ -46,7 +46,7 @@ func NewHttp(handler HttpHandler) HttpService {
 		func(next echo.HandlerFunc) echo.HandlerFunc {
 			return func(c echo.Context) error {
 				if lang := c.Request().Header.Get("Accept-Language"); lang != "" {
-					translator.Tr.SetLanguage(lang)
+					util.Tr.SetLanguage(lang)
 				}
 				return next(c)
 			}

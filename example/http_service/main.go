@@ -3,9 +3,10 @@ package main
 import (
 	"path/filepath"
 
+	"github.com/ManiMuridi/goclean/util"
+
 	"github.com/ManiMuridi/goclean/config"
 	"github.com/ManiMuridi/goclean/service/httpservice"
-	"github.com/ManiMuridi/goclean/translator"
 )
 
 func main() {
@@ -14,7 +15,7 @@ func main() {
 	config.SetType("toml")
 	config.Load()
 
-	translator.Enable()
+	util.Enable()
 
 	httpSvc := httpservice.NewHttp(&handler{})
 
