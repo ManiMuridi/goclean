@@ -44,7 +44,7 @@ import (
 //       if subsequent string is lower case:
 //         move last character of upper case string to beginning of
 //         lower case string
-func Split(src string) (entries []string) {
+func SplitCamelCase(src string) (entries []string) {
 	// don't split invalid utf8
 	if !utf8.ValidString(src) {
 		return []string{src}
