@@ -2,50 +2,41 @@ package main
 
 import (
 	"fmt"
-	"os"
 
-	"github.com/casbin/casbin/v2"
+	mongodbadapter "github.com/casbin/mongodb-adapter/v2"
+
+	"github.com/ManiMuridi/goclean/config"
+	"github.com/ManiMuridi/goclean/security"
 )
 
-type Policy struct {
-	Subject string
-	Object  string
-	Action  string
-}
-
 func main() {
-	p := &Policy{
+	config.Load()
+	policy := &security.Policy{
 		Subject: "sales",
 		Object:  "employee",
 		Action:  "read",
 	}
 
-	fmt.Println(Enforce(p))
-}
+	mongoUrl := fmt.Sprintf("%s:%s", config.GetString("mongodb.host"), config.GetString("mongodb.port"))
 
-func Enforce(policy *Policy) bool {
-	e, err := casbin.NewEnforcer("./rbac.conf", "./policy.csv")
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(0)
-	}
+	a := mongodbadapter.NewAdapter(mongoUrl)
+	security.Configure("./rbac.conf", a)
 
-	if allowed, err := e.Enforce(policy.Subject, policy.Object, policy.Action); allowed && err == nil {
-		// permit alice to read data1
-		fmt.Println("Permitted")
-		return true
-	} else if err != nil {
-		printErr(err)
-		return false
-	}
+	//security.AddPolicy(&security.RbacPolicy{
+	//	Subject: "sales",
+	//	Object:  "employee",
+	//	Action:  "read",
+	//	Effect:  "allow",
+	//})
 
-	fmt.Println("Not Permitted")
+	//security.RemovePolicy(&security.RbacPolicy{
+	//	Subject: "sales",
+	//	Object:  "employee",
+	//	Action:  "read",
+	//	Effect:  "allow",
+	//})
 
-	return false
-}
+	authorized, err := security.AuthorizePolicy(policy)
 
-func printErr(err error) {
-	if err != nil {
-		fmt.Println(err)
-	}
+	fmt.Println(authorized, err)
 }
