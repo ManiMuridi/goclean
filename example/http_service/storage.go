@@ -52,5 +52,6 @@ func (p *postgres) FindByName(name string) (*model.User, error) {
 }
 
 func (p *postgres) Store(user model.User) error {
+	users = append(users, user)
 	return nil
 }

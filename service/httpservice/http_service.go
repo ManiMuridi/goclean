@@ -82,7 +82,12 @@ func (s *httpService) Bootstrap() error {
 
 	for i := range s.handler.Routes() {
 		route := s.handler.Routes()[i]
-		s.http.Add(route.Method, route.Path, route.HandlerFunc, route.Middleware...)
+
+		handlerFunc := func(ctx echo.Context) error {
+			return route.Handler(&Request{Context: ctx})
+		}
+
+		s.http.Add(route.Method, route.Path, handlerFunc, route.Middleware...)
 	}
 
 	for i := range s.handler.Middleware() {
