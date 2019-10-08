@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/ManiMuridi/goclean/command"
-
 	"github.com/ManiMuridi/goclean/service/httpservice"
 
 	"github.com/labstack/echo/v4"
@@ -62,7 +61,11 @@ func (h *handler) Routes() []httpservice.Route {
 				req := &CreateRequest{}
 
 				if err := request.Context.Bind(&req.User); err != nil {
-					return request.Context.JSON(http.StatusInternalServerError, err)
+					return request.Context.JSON(http.StatusInternalServerError, command.ErrorResult(err))
+				}
+
+				if err := request.Context.Validate(req); err != nil {
+					return request.Context.JSON(http.StatusBadRequest, command.ErrorResult(err))
 				}
 
 				result := command.Execute(&Create{req})

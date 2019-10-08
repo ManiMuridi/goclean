@@ -1,6 +1,8 @@
 package main
 
-import "github.com/ManiMuridi/goclean/command"
+import (
+	"github.com/ManiMuridi/goclean/command"
+)
 
 type GetByName struct {
 	Name string
