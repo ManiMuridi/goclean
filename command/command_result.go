@@ -18,3 +18,10 @@ func (cr *Result) GetDataType() reflect.Type {
 func (cr *Result) Decode(data interface{}) {
 	cr.Error = mapstructure.Decode(cr.Data, data)
 }
+
+func ErrorResult(err error) *Result {
+	return &Result{
+		Error: err,
+		Data:  nil,
+	}
+}
