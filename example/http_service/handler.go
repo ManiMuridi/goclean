@@ -12,7 +12,7 @@ import (
 type handler struct{}
 
 func (h *handler) Middleware() []echo.MiddlewareFunc {
-	return []echo.MiddlewareFunc{Cors}
+	return []echo.MiddlewareFunc{}
 }
 
 func (h *handler) Routes() []httpservice.Route {
@@ -21,56 +21,45 @@ func (h *handler) Routes() []httpservice.Route {
 			Name:   "Get All Users",
 			Path:   "/users",
 			Method: http.MethodGet,
-			Handler: func(request *httpservice.Request) error {
+			Handler: func(ctx *httpservice.Context) error {
 				result := command.Execute(&GetAll{})
-				return request.Context.JSON(http.StatusOK, result)
+				return ctx.JSON(http.StatusOK, result)
 			},
 		},
 		{
 			Name:   "Get User By Name",
 			Path:   "/users/:name",
 			Method: http.MethodGet,
-			Handler: func(request *httpservice.Request) error {
-				name := request.Context.Param("name")
+			Handler: func(ctx *httpservice.Context) error {
+				name := ctx.Param("name")
 				result := command.Execute(&GetByName{name})
-				return request.Context.JSON(http.StatusOK, result)
+				return ctx.JSON(http.StatusOK, result)
 			},
 		},
 		{
 			Name:   "Update User By Name",
 			Path:   "/users/:name",
 			Method: http.MethodPut,
-			Handler: func(request *httpservice.Request) error {
-				name := request.Context.Param("name")
-				req := &UpdateByNameRequest{Name: name}
-
-				if err := request.Context.Bind(&req.User); err != nil {
-					return request.Context.JSON(http.StatusInternalServerError, err)
-				}
-
-				result := command.Execute(&Update{req})
-
-				return request.Context.JSON(http.StatusOK, result)
+			Handler: func(ctx *httpservice.Context) error {
+				name := ctx.Param("name")
+				//req := &UpdateByNameRequest{Name: name}
+				cmd := &Update{UserName: name}
+				return ctx.BindableJSONResult(cmd)
+				//if err := ctx.Bind(&req.User); err != nil {
+				//	return ctx.JSON(http.StatusInternalServerError, err)
+				//}
+				//
+				//result := command.Execute(&Update{req})
+				//
+				//return ctx.JSON(http.StatusOK, result)
 			},
 		},
 		{
 			Name:   "Create User",
 			Path:   "/users",
 			Method: http.MethodPost,
-			Handler: func(request *httpservice.Request) error {
-				req := &CreateRequest{}
-
-				if err := request.Context.Bind(&req.User); err != nil {
-					return request.Context.JSON(http.StatusInternalServerError, command.ErrorResult(err))
-				}
-
-				if err := request.Context.Validate(req); err != nil {
-					return request.Context.JSON(http.StatusBadRequest, command.ErrorResult(err))
-				}
-
-				result := command.Execute(&Create{req})
-
-				return request.Context.JSON(http.StatusOK, result)
+			Handler: func(ctx *httpservice.Context) error {
+				return ctx.BindableJSONResult(&Create{})
 			},
 		},
 	}

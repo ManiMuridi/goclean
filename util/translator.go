@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/BurntSushi/toml"
 
@@ -22,18 +23,20 @@ type Translator interface {
 }
 
 var (
-	Tr Translator
+	Tr Translator = newTranslator()
 )
 
-func EnableTranslation() {
-	Tr = newTranslator()
-}
+//
+//func EnableTranslation() {
+//	Tr = newTranslator()
+//}
 
 func newTranslator() *translator {
 	bundle := i18n.NewBundle(language.English)
 	translate := &translator{bundle: bundle}
 	translate.RegisterUnmarshalFunc("toml", toml.Unmarshal)
-	translate.TranslationFilesPath("translations")
+
+	translate.TranslationFilesPath("")
 	translate.SetLanguage("en")
 	return translate
 }
@@ -51,13 +54,20 @@ func (t *translator) RegisterUnmarshalFunc(format string, unmarshalFunc i18n.Unm
 func (t *translator) TranslationFilesPath(fPath string) {
 	var files []string
 
-	dir, err := filepath.Abs(".")
+	//dir, err := filepath.Abs(".")
+	//
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 
-	if err != nil {
-		fmt.Println(err)
+	_, b, _, _ := runtime.Caller(0)
+	dir := filepath.Join(filepath.Dir(b), "../")
+	if fPath == "" {
+		fPath = "translations"
 	}
 
-	t.translationsPath = fmt.Sprintf("%s/%s", dir, fPath)
+	translPath := fmt.Sprintf("%s/%s", dir, fPath)
+	t.translationsPath = translPath
 
 	if _, err := os.Stat(t.translationsPath); !os.IsNotExist(err) {
 		if err != nil {

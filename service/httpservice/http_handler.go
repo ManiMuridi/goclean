@@ -9,15 +9,11 @@ type HttpHandler interface {
 	Routes() []Route
 }
 
-type Request struct {
-	Context echo.Context
-}
-
 type Route struct {
 	Method     string
 	Path       string
 	Name       string
-	Handler    func(request *Request) error
+	Handler    func(context *Context) error
 	Middleware []echo.MiddlewareFunc
 }
 

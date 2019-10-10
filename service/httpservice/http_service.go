@@ -18,19 +18,18 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"gopkg.in/go-playground/validator.v9"
 )
 
 type HttpService interface {
 	Run()
 	Handler() HttpHandler
-	Validator() *validation.Validator
+	Validator() *validation.V
 }
 
 type httpService struct {
 	handler   HttpHandler
 	http      *echo.Echo
-	validator *validation.Validator
+	validator *validation.V
 	logger    *zerolog.Logger
 }
 
@@ -60,14 +59,12 @@ func NewHttp(handler HttpHandler) HttpService {
 	return svc.(HttpService)
 }
 
-func (s *httpService) Validator() *validation.Validator {
+func (s *httpService) Validator() *validation.V {
 	return s.validator
 }
 
 func (s *httpService) configure() error {
-	validate := validator.New()
-
-	s.validator = &validation.Validator{Validator: validate}
+	s.validator = validation.Validator
 	s.http.Validator = s.validator
 
 	return nil
@@ -84,7 +81,7 @@ func (s *httpService) Bootstrap() error {
 		route := s.handler.Routes()[i]
 
 		handlerFunc := func(ctx echo.Context) error {
-			return route.Handler(&Request{Context: ctx})
+			return route.Handler(&Context{Context: ctx})
 		}
 
 		s.http.Add(route.Method, route.Path, handlerFunc, route.Middleware...)
