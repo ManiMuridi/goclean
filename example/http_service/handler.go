@@ -49,7 +49,7 @@ func (h *handler) Routes() []httpservice.Route {
 			Method: http.MethodPost,
 			Handler: func(ctx *httpservice.Context) error {
 				req := &CreateRequest{}
-				return ctx.BindableJSONResult(&Create{Request: req, More: req}, &req.User)
+				return ctx.BindableJSONResult(&Create{Request: req}, &req.User)
 			},
 		},
 	}
