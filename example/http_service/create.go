@@ -6,14 +6,12 @@ import (
 	"github.com/ManiMuridi/goclean/validation"
 )
 
-type Create struct {
-	Name  string `validate:"required"`
-	Email string `validate:"email"`
-	//Request *CreateRequest
-}
-
 type CreateRequest struct {
 	User model.User
+}
+
+type Create struct {
+	Request *CreateRequest
 }
 
 func (c *Create) Validate() error {
@@ -21,12 +19,12 @@ func (c *Create) Validate() error {
 }
 
 func (c *Create) Execute() *command.Result {
-	//if err := Db.Store(c.Request.User); err != nil {
-	//	return &command.Result{
-	//		Error: err,
-	//		Data:  nil,
-	//	}
-	//}
+	if err := Db.Store(c.Request.User); err != nil {
+		return &command.Result{
+			Error: err,
+			Data:  nil,
+		}
+	}
 
-	return &command.Result{Error: nil, Data: model.User{Name: c.Name, Email: c.Email}}
+	return &command.Result{Error: nil, Data: c.Request.User}
 }

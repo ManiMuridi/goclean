@@ -2,6 +2,7 @@ package httpservice
 
 import (
 	"net/http"
+	"reflect"
 
 	"github.com/ManiMuridi/goclean/syserr"
 
@@ -13,9 +14,19 @@ type Context struct {
 	echo.Context
 }
 
-func (ctx *Context) BindableJSONResult(cmd command.Command) error {
-	if err := ctx.Bind(&cmd); err != nil {
-		return ctx.JSON(http.StatusBadRequest, NewResponse(err, nil))
+func (ctx *Context) BindableJSONResult(cmd command.Command, data interface{}) error {
+	if reflect.ValueOf(data).Type().Kind() != reflect.Ptr {
+		return ctx.JSON(http.StatusInternalServerError, NewResponse(&syserr.ValidationError{"Data": "Data must be a pointer struct"}, nil))
+	}
+
+	if data != nil {
+		if err := ctx.Bind(&data); err != nil {
+			return ctx.JSON(http.StatusBadRequest, NewResponse(err, nil))
+		}
+	} else {
+		if err := ctx.Bind(&cmd); err != nil {
+			return ctx.JSON(http.StatusBadRequest, NewResponse(err, nil))
+		}
 	}
 
 	return ctx.JSONResult(cmd)
