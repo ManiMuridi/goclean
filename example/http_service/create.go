@@ -3,14 +3,19 @@ package main
 import (
 	"github.com/ManiMuridi/goclean/command"
 	"github.com/ManiMuridi/goclean/example/http_service/model"
+	"github.com/ManiMuridi/goclean/validation"
 )
+
+type CreateRequest struct {
+	User model.User
+}
 
 type Create struct {
 	Request *CreateRequest
 }
 
-type CreateRequest struct {
-	User model.User
+func (c *Create) Validate() error {
+	return validation.Validator.Validate(c)
 }
 
 func (c *Create) Execute() *command.Result {
