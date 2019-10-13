@@ -13,3 +13,13 @@ func (v ValidationError) Error() string {
 
 	return msg
 }
+
+type Error string
+
+func (e Error) Error() string {
+	return string(e)
+}
+
+func New(s string) error {
+	return Error(s)
+}
