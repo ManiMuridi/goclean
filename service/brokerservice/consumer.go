@@ -12,21 +12,20 @@ import (
 	"github.com/ManiMuridi/goclean/validation"
 	"github.com/rs/zerolog"
 	"github.com/streadway/amqp"
-	"gopkg.in/go-playground/validator.v9"
 )
 
 type Consumer interface {
 	Run()
 	Handler() Handler
 	//Config() *Config
-	Validator() *validation.Validator
+	Validator() *validation.V
 }
 
 type consumer struct {
 	handler    Handler
 	exchanges  map[string]Exchange
 	connection *amqp.Connection
-	validator  *validation.Validator
+	validator  *validation.V
 	//config     *Config
 	logger *zerolog.Logger
 }
@@ -35,7 +34,7 @@ func (c *consumer) ConfigLogger(logger *zerolog.Logger) {
 	c.logger = logger
 }
 
-func (c *consumer) Validator() *validation.Validator {
+func (c *consumer) Validator() *validation.V {
 	return c.validator
 }
 
@@ -175,8 +174,7 @@ func (c *consumer) Logger() *zerolog.Logger {
 }
 
 func (c *consumer) configure() error {
-	validate := validator.New()
-	c.validator = &validation.Validator{Validator: validate}
+	c.validator = validation.Validator
 
 	return nil
 }

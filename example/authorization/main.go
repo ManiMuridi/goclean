@@ -1,26 +1,25 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-
-	mongodbadapter "github.com/casbin/mongodb-adapter/v2"
-
-	"github.com/ManiMuridi/goclean/config"
-	"github.com/ManiMuridi/goclean/security"
 )
 
 func main() {
-	config.Load()
-	policy := &security.Policy{
-		Subject: "sales",
-		Object:  "employee",
-		Action:  "read",
-	}
-
-	mongoUrl := fmt.Sprintf("%s:%s", config.GetString("mongodb.host"), config.GetString("mongodb.port"))
-
-	a := mongodbadapter.NewAdapter(mongoUrl)
-	security.Configure("./rbac.conf", a)
+	jBytes, _ := json.Marshal(struct{ Name string }{"Bob"})
+	fmt.Println(jBytes)
+	fmt.Println(string(jBytes))
+	//config.Load()
+	//policy := &security.Policy{
+	//	Subject: "sales",
+	//	Object:  "employee",
+	//	Action:  "read",
+	//}
+	//
+	//mongoUrl := fmt.Sprintf("%s:%s", config.GetString("mongodb.host"), config.GetString("mongodb.port"))
+	//
+	//a := mongodbadapter.NewAdapter(mongoUrl)
+	//security.Configure("./rbac.conf", a)
 
 	//security.AddPolicy(&security.RbacPolicy{
 	//	Subject: "sales",
@@ -36,7 +35,7 @@ func main() {
 	//	Effect:  "allow",
 	//})
 
-	authorized, err := security.AuthorizePolicy(policy)
-
-	fmt.Println(authorized, err)
+	//authorized, err := security.AuthorizePolicy(policy)
+	//
+	//fmt.Println(authorized, err)
 }
