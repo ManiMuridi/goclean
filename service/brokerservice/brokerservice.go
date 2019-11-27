@@ -48,3 +48,37 @@ func NewConsumer(handler Handler) Consumer {
 
 	return svc.(Consumer)
 }
+
+func declareNamedQueue(ch *amqp.Channel, queueName string) (amqp.Queue, error) {
+	return ch.QueueDeclare(
+		queueName, // name
+		true,      // durable
+		false,     // delete when unused
+		false,     // exclusive
+		false,     // no-wait
+		nil,       // arguments
+	)
+}
+
+func declareRandomQueue(ch *amqp.Channel) (amqp.Queue, error) {
+	return ch.QueueDeclare(
+		"",    // name
+		false, // durable
+		false, // delete when unused
+		true,  // exclusive
+		false, // no-wait
+		nil,   // arguments
+	)
+}
+
+func declareExchange(ch *amqp.Channel, exchangeName string) error {
+	return ch.ExchangeDeclare(
+		exchangeName, // name
+		"topic",      // type
+		true,         // durable
+		false,        // auto-deleted
+		false,        // internal
+		false,        // no-wait
+		nil,          // arguments
+	)
+}
