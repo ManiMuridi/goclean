@@ -67,15 +67,20 @@ func (c *consumer) Bootstrap() error {
 			c.logger.Panic().Err(err)
 		}
 
+		exchangeName := c.handler.Queues()[i].Exchange
+
 		listener := Queue{
-			Exchange:    c.handler.Queues()[i].Exchange,
+			Exchange:    exchangeName,
 			Topic:       c.handler.Queues()[i].Topic,
 			HandlerFunc: c.handler.Queues()[i].HandlerFunc,
 		}
+
 		exchange := Exchange{
-			Name:    c.handler.Queues()[i].Exchange,
+			Name:    exchangeName,
 			channel: ch,
 		}
+
+		declareExchange(ch, exchangeName)
 
 		queue, err := exchange.channel.QueueDeclare(
 			"",    // name
@@ -93,9 +98,9 @@ func (c *consumer) Bootstrap() error {
 		listener.queue = queue
 
 		err = exchange.channel.QueueBind(
-			listener.queue.Name,
+			queue.Name,
 			listener.Topic,
-			exchange.Name,
+			exchangeName,
 			false,
 			nil,
 		)
@@ -106,7 +111,6 @@ func (c *consumer) Bootstrap() error {
 
 		exchange.Queues = append(exchange.Queues, listener)
 		c.exchanges[exchange.Name] = exchange
-
 	}
 
 	return nil
