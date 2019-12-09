@@ -20,7 +20,7 @@ func (ctx *Context) BindableJSONResult(cmd command.Command, data interface{}) er
 	}
 
 	if data != nil {
-		if err := ctx.Bind(&data); err != nil {
+		if err := ctx.Bind(data); err != nil {
 			return ctx.JSON(http.StatusBadRequest, NewResponse(err, nil))
 		}
 	} else {
